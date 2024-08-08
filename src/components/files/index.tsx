@@ -8,13 +8,23 @@ import '../../css/files.css';
 import CodeTab from "./tab_code";
 
 interface Props {
-  setCode: (code: string) => void;
-  attachFiles: (files: File[]) => void;
+  setActiveCode: (code: string) => void;
+  setActiveFile: (file: string) => void;
+  setFiles: (files: storedFile[]) => void;
+  files: storedFile[];
 }
 
-const FileManager = ({ setCode, attachFiles }: Props) => {
+const FileManager = ({ setActiveCode, setActiveFile, files, setFiles }: Props) => {
   const [tab, setTab] = useState('list');
-  const [files, setFiles] = useState<storedFile[]>([]);
+
+  const setCode = (item: storedFile) => {
+    setActiveCode(item.content)
+    setActiveFile(item.name)
+  }
+
+  const handleUploadedFiles = (uploadedFiles: storedFile[]) => {
+    setFiles([...files, ...uploadedFiles])
+  }
 
   return (
     <div style={{ width: "20vw", display: 'flex', flexDirection: 'column' }}>
@@ -26,9 +36,9 @@ const FileManager = ({ setCode, attachFiles }: Props) => {
         savedCodes={[]} 
         setFiles={setFiles} 
         setSavedCodes={setFiles}
-        setCode={(item: storedFile) => setCode(item.content)}
+        setCode={setCode}
       />}
-      {tab === 'upload' && <FileUploader setUploadedFiles={setFiles} />}
+      {tab === 'upload' && <FileUploader setUploadedFiles={handleUploadedFiles} />}
       {tab === 'config' && <Config />}
       {tab === 'code' && <CodeTab />}
       

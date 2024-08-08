@@ -20,6 +20,9 @@ const FileListener = ({
 }: Props) => {
   const [showUploaded, setShowUploaded] = useState(true);
   const [showSaved, setShowSaved] = useState(false);
+  const uploadedFiles = files.filter((f) => f.uploaded);
+  const savedFiles = files.filter((f) => !f.uploaded);
+
 
   const removeFile = (index: number) => {
     const newFiles = [...files];
@@ -53,7 +56,7 @@ const FileListener = ({
         </label>
         {showUploaded && (
           <div className="files">
-            {files.map((item, index: number) => (
+            {uploadedFiles.map((item, index: number) => (
               <div key={item.name}>
                 <div className="file">
                   <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }} onClick={() => setCode(item)}>
@@ -87,7 +90,7 @@ const FileListener = ({
         </label>
         {showSaved && (
           <div className="files">
-            {savedCodes.map((item: any, index: number) => (
+            {savedFiles.map((item: any, index: number) => (
               <div key={item.name}>
                 <div className="file">
                   <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }} onClick={() => setCode(item)}>

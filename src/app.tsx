@@ -1,22 +1,42 @@
-import './css/app.css'
-import FileManager from './components/files'
-import { Editor } from '@monaco-editor/react'
 import { useState } from 'react'
 
+import './css/app.css'
+import FileManager from './components/files'
+import CodeEditor from './components/code'
+import { storedFile } from './components/files/tab_file_uploader'
+
 function App() {
-  const [code, setCode] = useState('')
+  const [activeCode, setActiveCode] = useState<string>('')
+  const [files, setFiles] = useState([] as storedFile[])
+  const [activeFile, setActiveFile] = useState<string>('')
+  const [openedFiles] = useState<string[]>([])
+
+  const handleActiveFile = (file: string | null) => {
+    if (file) {
+      setActiveFile(file)
+    } else {
+      setFiles([...files, { name: `newFile`, content: '' }])
+      setActiveFile('newFile')
+    }
+  }
+
 
   return (
     <div style={{ backgroundColor: 'black', width: '100vw', maxHeight: '100vh' }}>
       <div className='row'>
-        <FileManager setCode={(code: string) => setCode(code)} attachFiles={() => console.log(null)} />
-        <Editor
-          value={code}
-          onChange={(value: string | undefined) => setCode(value || '')}
-          height="90vh" 
-          width="40vw" 
-          defaultLanguage="javascript" 
-          defaultValue="// some comment"
+        <FileManager 
+          files={files} 
+          setFiles={setFiles} 
+          setActiveFile={handleActiveFile}
+          setActiveCode={(code: string) => setActiveCode(code)} 
+        />
+        <CodeEditor 
+          code={activeCode} 
+          setCode={(code: string) => setActiveCode(code)} 
+          activeFile={activeFile}
+          setActiveFile={handleActiveFile}
+          openedFiles={openedFiles}
+          closeFile={(name) => console.log(name)}
         />
       </div>
     </div>

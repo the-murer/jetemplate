@@ -5,6 +5,7 @@ import React, { useState } from "react";
 export type storedFile = {
   name: string;
   content: string;
+  uploaded?: boolean
 }
 
 type Props = {
@@ -21,7 +22,7 @@ const FileUploader = ({ setUploadedFiles }: Props) => {
     const readFile = (file: File) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => resolve({ name: file.name, content: e?.target?.result || '' });
+        reader.onload = (e) => resolve({ name: file.name, content: e?.target?.result || '', uploaded: true });
         reader.onerror = reject;
         reader.readAsText(file); // You can use readAsDataURL or other methods depending on file type
       });
