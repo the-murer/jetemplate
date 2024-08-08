@@ -4,19 +4,19 @@ import { ChevronRight, FileJson, Trash } from "lucide-react";
 import { storedFile } from "./tab_file_uploader";
 
 type Props = {
-  files: storedFile[];
   savedCodes: any[];
-  setFiles: (files: storedFile[]) => void;
   setSavedCodes: (savedCodes: any[]) => void;
+  files: storedFile[];
+  setFiles: (files: storedFile[]) => void;
+  setActiveFile: (id: string) => void;
   setCode: any;
 };
 
 const FileListener = ({
   files,
-  savedCodes,
   setFiles,
-  setSavedCodes,
   setCode,
+  setActiveFile,
 }: Props) => {
   const [showUploaded, setShowUploaded] = useState(true);
   const [showSaved, setShowSaved] = useState(false);
@@ -24,16 +24,14 @@ const FileListener = ({
   const savedFiles = files.filter((f) => !f.uploaded);
 
 
-  const removeFile = (index: number) => {
-    const newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles(newFiles);
-  };
+  const setFileAsActive = (item: storedFile) => {
+    setActiveFile(item.id)
+    setCode(item)
+  }
 
-  const removeSavedCode = (index: number) => {
-    const newSavedCodes = [...savedCodes];
-    newSavedCodes.splice(index, 1);
-    setSavedCodes(newSavedCodes);
+  const removeFile = (id: string) => {
+    const newFiles = [ ...files.filter((f) => f.id !== id)];
+    setFiles(newFiles);
   };
 
   return (
@@ -56,14 +54,14 @@ const FileListener = ({
         </label>
         {showUploaded && (
           <div className="files">
-            {uploadedFiles.map((item, index: number) => (
-              <div key={item.name}>
+            {uploadedFiles.map((item) => (
+              <div key={`uploaded-saved-${item.id}`}>
                 <div className="file">
-                  <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }} onClick={() => setCode(item)}>
+                  <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }} onClick={() => setFileAsActive(item)}>
                     <FileJson style={{ position: "relative", top: "10px" }} />
                     <p>{item.name}</p>
                   </div>
-                  <button style={{ marginLeft: "auto" }} onClick={() => removeFile(index)} >
+                  <button style={{ marginLeft: "auto" }} onClick={() => removeFile(item.id)} >
                     <Trash size={16} />
                   </button>
                 </div>
@@ -90,14 +88,14 @@ const FileListener = ({
         </label>
         {showSaved && (
           <div className="files">
-            {savedFiles.map((item: any, index: number) => (
-              <div key={item.name}>
+            {savedFiles.map((item: any) => (
+              <div key={`saved-${item.id}`}>
                 <div className="file">
-                  <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }} onClick={() => setCode(item)}>
+                  <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }} onClick={() => setFileAsActive(item)}>
                     <FileJson style={{ position: "relative", top: "10px" }} />
                       <p>{item.name}</p>
                     </div>
-                    <button onClick={() => removeSavedCode(index)}>
+                    <button style={{ marginLeft: "auto" }} onClick={() => removeFile(item.id)}>
                       <Trash size={16} />
                     </button>
                   </div>

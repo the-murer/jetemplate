@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 
 export type storedFile = {
+  id: string;
   name: string;
   content: string;
   uploaded?: boolean
@@ -11,6 +12,8 @@ export type storedFile = {
 type Props = {
   setUploadedFiles: (files: storedFile[]) => void;
 };
+
+const generateId = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 const FileUploader = ({ setUploadedFiles }: Props) => {
   const [files, setFiles] = useState<storedFile[]>([]);
@@ -22,7 +25,12 @@ const FileUploader = ({ setUploadedFiles }: Props) => {
     const readFile = (file: File) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => resolve({ name: file.name, content: e?.target?.result || '', uploaded: true });
+        reader.onload = (e) => resolve({ 
+          id: generateId(),
+          name: file.name, 
+          content: e?.target?.result || '', 
+          uploaded: true 
+        });
         reader.onerror = reject;
         reader.readAsText(file); // You can use readAsDataURL or other methods depending on file type
       });
@@ -67,7 +75,7 @@ const FileUploader = ({ setUploadedFiles }: Props) => {
       <div>
         <ul>
           {files.map((item: storedFile) => (
-            <div key={item.name}>
+            <div key={`uploaded-${item.id}`}>
               <div className="file">
                 <FileUp />
                 <p>{item.name}</p>

@@ -5,19 +5,33 @@ import FileManager from './components/files'
 import CodeEditor from './components/code'
 import { storedFile } from './components/files/tab_file_uploader'
 
+const generateId = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
 function App() {
   const [activeCode, setActiveCode] = useState<string>('')
   const [files, setFiles] = useState([] as storedFile[])
   const [activeFile, setActiveFile] = useState<string>('')
-  const [openedFiles] = useState<string[]>([])
+  const [openedFiles, setOpenedFiles] = useState<string[]>([])
 
-  const handleActiveFile = (file: string | null) => {
-    if (file) {
-      setActiveFile(file)
+  const handleActiveFile = (id: string | null) => {
+    console.log('🚀 ~ id:', id);
+    if (id) {
+      setActiveFile(id)
+      setOpenedFiles([...openedFiles, id])
     } else {
-      setFiles([...files, { name: `newFile`, content: '' }])
-      setActiveFile('newFile')
+      const newId = generateId()
+      setFiles([...files, { 
+        id: newId,
+        name: `newFile`, 
+        content: '', 
+        uploaded: false 
+      }])
+      setActiveFile(newId)
     }
+  }
+
+  const handleCloseFile = (id: string) => {
+    setOpenedFiles(openedFiles.filter((f) => f !== id))
   }
 
 
@@ -36,7 +50,8 @@ function App() {
           activeFile={activeFile}
           setActiveFile={handleActiveFile}
           openedFiles={openedFiles}
-          closeFile={(name) => console.log(name)}
+          files={files}
+          closeFile={handleCloseFile}
         />
       </div>
     </div>

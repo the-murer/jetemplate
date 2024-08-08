@@ -9,7 +9,7 @@ import CodeTab from "./tab_code";
 
 interface Props {
   setActiveCode: (code: string) => void;
-  setActiveFile: (file: string) => void;
+  setActiveFile: (id: string) => void;
   setFiles: (files: storedFile[]) => void;
   files: storedFile[];
 }
@@ -37,6 +37,7 @@ const FileManager = ({ setActiveCode, setActiveFile, files, setFiles }: Props) =
         setFiles={setFiles} 
         setSavedCodes={setFiles}
         setCode={setCode}
+        setActiveFile={setActiveFile}
       />}
       {tab === 'upload' && <FileUploader setUploadedFiles={handleUploadedFiles} />}
       {tab === 'config' && <Config />}

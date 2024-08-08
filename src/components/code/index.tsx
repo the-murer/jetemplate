@@ -7,7 +7,7 @@ type Props = {
     activeFile: string;
     openedFiles: string[];
     setActiveFile: (file: string | null) => void;
-    closeFile: (file: string | null) => void;
+    closeFile: (id: string | null) => void;
     code: string;
     setCode: (code: string) => void;
 }
@@ -21,6 +21,7 @@ const CodeEditor = ({ code, setCode, openedFiles, setActiveFile, activeFile, clo
         activeFile={activeFile}
         setActiveFile={setActiveFile}
         closeFile={closeFile}
+        files={files}
       />
       <Editor
         height="90vh"
