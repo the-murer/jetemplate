@@ -19,7 +19,7 @@ const FileManager = ({ setActiveCode, setActiveFile, files, setFiles }: Props) =
 
   const setCode = (item: storedFile) => {
     setActiveCode(item.content)
-    setActiveFile(item.name)
+    setActiveFile(item.id)
   }
 
   const handleUploadedFiles = (uploadedFiles: storedFile[]) => {

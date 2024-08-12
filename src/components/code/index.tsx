@@ -2,20 +2,22 @@ import { Editor } from "@monaco-editor/react";
 
 import "../../css/code.css";
 import ActiveCodeTab from "./current_file";
+import { storedFile } from "../files/tab_file_uploader";
 
 type Props = {
     activeFile: string;
     openedFiles: string[];
+    files: storedFile[];
     setActiveFile: (file: string | null) => void;
-    closeFile: (id: string | null) => void;
+    closeFile: (id: string) => void;
     code: string;
     setCode: (code: string) => void;
 }
 
-const CodeEditor = ({ code, setCode, openedFiles, setActiveFile, activeFile, closeFile }: Props) => {
+const CodeEditor = ({ code, setCode, openedFiles, setActiveFile, activeFile, closeFile, files }: Props) => {
 
   return (                        
-    <div className="code-editor">
+    <div className="code-editor" style={{ marginLeft: '5px' }}>
       <ActiveCodeTab 
         editingFiles={openedFiles} 
         activeFile={activeFile}

@@ -1,7 +1,6 @@
-import { X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import "../../css/files.css";
 import { storedFile } from "../files/tab_file_uploader";
-
 
 interface Props {
   editingFiles: string[];
@@ -13,25 +12,31 @@ interface Props {
 
 const ActiveCodeTab = ({ files, editingFiles, setActiveFile, activeFile, closeFile }: Props) => {
   return (
-    <div className="row">
-      {editingFiles.map((fileId: string, index: number) => {
-          const file: storedFile = files.find((f) => f.id === fileId) || { id: null, name: 'newFile' };
+    <div style={{ marginBottom: '5px' }} className="row">
+      {editingFiles.map((fileId: string) => {
+          const file: storedFile | undefined = files.find((f) => f.id === fileId);
+          if (!file) return null;
+          const active = activeFile === file.id 
           return (
-            <div onClick={() => setActiveFile(file.id)} className="row">
-              {file.name}
-              <button key={index} onClick={() => closeFile(file.id)} className={activeFile === file ? "active-tab" : "tab"}>
-                <X size={20} color="white" />
-              </button>
+            <div className={active ? "active-code-tab" : "code-tab"}>
+              <div style={{ backgroundColor: '#ff00ff', marginTop: '2.5px' }} onClick={() => setActiveFile(file.id)} >
+                {file.name}
+              </div>
+              <X 
+                onClick={() => closeFile(file.id)} 
+                size={20} 
+                color="white"
+                style={{ marginLeft: '5px', marginTop: '4px', backgroundColor: 'red' }}
+              />
             </div>
           );
         })}
-      <button onClick={() => setActiveFile(null)}> 
-        Add
-        <button onClick={() => setActiveFile(null)}>
-          <X size={20} color="white" />
-        </button>
+      <button onClick={() => setActiveFile(null)}>
+        <p>
+          New
+        </p>
+        <Plus size={20} color="white" />
       </button>
-      
     </div>
   );
 };

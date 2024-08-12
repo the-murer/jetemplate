@@ -14,10 +14,13 @@ function App() {
   const [openedFiles, setOpenedFiles] = useState<string[]>([])
 
   const handleActiveFile = (id: string | null) => {
-    console.log('🚀 ~ id:', id);
     if (id) {
+      if (!files.map((f) => f.id).includes(id)) return;
       setActiveFile(id)
-      setOpenedFiles([...openedFiles, id])
+      if (!openedFiles.includes(id)) {
+        setOpenedFiles([...openedFiles, id])
+      }
+      setActiveCode(files.find((f) => f.id === id)?.content || '')
     } else {
       const newId = generateId()
       setFiles([...files, { 
